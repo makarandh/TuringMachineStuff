@@ -1,0 +1,38 @@
+; http://morphett.info/turing/
+; Accept strings of the form 000...(repeated n times)111...(repeated n times)
+; Reject everything else
+; e.g. empty input, 01, 0011, 000111 etc. are accepted
+; 10 11 011 etc. are rejected
+
+; Algorithm:
+; There are 3 states: a, b, and c.
+; Start with state a. (0 -> a)
+; If you encounter 1, reject. (a -> reject)
+; If you encounter 0, set it to X and move right. (a -> b)
+; Keep going right if you encounter 0. (b -> b)
+; If you encounter 1, set it to Y and start moving left. (b -> c)
+; Keep going left if you encounter 0. (c -> c)
+; If you encounter X, move right. (c -> a)
+; Keep going right if you encounter Y (a -> a)
+; If end of string, string is accepted (a -> accept)
+; Go to beginning 
+
+
+
+0 * * * a
+a 0 X r b
+a 1 1 r halt-reject
+a _ _ r halt-accept
+a Y Y r a
+
+b 0 0 r b
+b Y Y r b
+b _ _ r halt-reject 
+b 1 Y l c
+
+c 0 0 l c
+c Y Y l c 
+c X X r a
+
+
+
